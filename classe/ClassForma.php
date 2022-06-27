@@ -1,7 +1,8 @@
 <?php
     //include_once 'conf/Conexao.php';
     //require_once 'conf/conf.inc.php';
-    class Forma{
+    require_once "../classe/ClassDatabase.php";
+    class Forma extends Database{
         private $id;
         private $cor;
         private $tabuleiro_idtabuleiro;

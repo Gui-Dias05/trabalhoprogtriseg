@@ -1,72 +1,72 @@
 <?php
     include_once '../conf/Conexao.php';
     require_once '../conf/conf.inc.php';
-    require_once "../classe/ClassForma.php";
-    class Quadrado extends Forma{
-        private $lado;
+    require_once "ClassForma.php";
+    class Circulo extends Forma{
+        private $raio;
         private static $contador;
 
-        public function __construct($id, $lado, $cor, $tabuleiro_idtabuleiro) {
+        public function __construct($id, $raio, $cor, $tabuleiro_idtabuleiro) {
             parent::__construct($id, $cor, $tabuleiro_idtabuleiro);
-            $this->setlado($lado);
+            $this->setraio($raio);
             self::$contador = self::$contador + 1;
         }
 
-        public function getlado() {
-            return $this->lado;
+        public function getraio() {
+            return $this->raio;
         }
 
-        public function setlado($lado) {
-            if ($lado >  0)
-                $this->lado = $lado;
+        public function setraio($raio) {
+            if ($raio >  0)
+                $this->raio = $raio;
         }
 
         public function __toString() {
-            return  "[Quadrado]<br>Id do Quadrado: ".$this->getid()."<br>".
-                    "Lado: ".$this->getlado()."<br>".
+            return  "[Circulo]<br>Id do Circulo: ".$this->getId()."<br>".
+                    "Raio: ".$this->getraio()."<br>".
                     "Cor: ".$this->getcor()."<br>".
                     "Área: ".round($this->Area(),2)."<br>".
-                    "Perimetro: ".round($this->Perimetro(),2)."<br>".
-                    "Diagonal: ".round($this->Diagonal(),2)."<br>".
+                    "Circunferência: ".round($this->Circunferencia(),2)."<br>".
+                    "Diâmetro: ".round($this->Diametro(),2)."<br>".
                     "Id do Tabuleiro: ".$this->gettabuleiro()."<br>".
                     "Contador: ".self::$contador."<br>";
         }
 
         public function Area() {
-            $area = $this->lado * $this->lado;
+            $area = pi() * pow($this->raio, 2);
             return $area;
         }
 
-        public function Perimetro() {
-            $perimetro = $this->lado * 4;
-            return $perimetro;
+        public function Circunferencia() {
+            $circunferencia = 2 * pi() * $this->raio;
+            return $circunferencia;
         }
 
-        public function Diagonal() {
-            $diagonal = $this->lado * sqrt(2);
-            return $diagonal;
+        public function Diametro() {
+            $diametro = 2 * $this->raio;
+            return $diametro;
         }
 
-        public function insere(){
-            $sql = 'INSERT INTO trabalho.quadrado (lado, cor, tabuleiro_idtabuleiro) 
-            VALUES(:lado, :cor, :tabuleiro_idtabuleiro)';
-            $parametros = array(":lado"=>$this->getLado(), 
+        public function inseri(){
+            $sql = 'INSERT INTO trabalho.circulo (raio, cor, tabuleiro_idtabuleiro) 
+            VALUES(:raio, :cor, :tabuleiro_idtabuleiro)';
+            $parametros = array(":raio"=>$this->getraio(), 
                                 ":cor"=>$this->getCor(), 
                                 ":tabuleiro_idtabuleiro"=>$this->getTabuleiro());
             return parent::executaComando($sql,$parametros);
         }
 
         public function exclui(){
-            $sql = 'DELETE FROM trabalho.quadrado WHERE id = :id';
+            $sql = 'DELETE FROM trabalho.circulo WHERE id = :id';
             $parametros = array(":id"=>$this->getId());
             return parent::executaComando($sql,$parametros);
         }
 
         public function edita(){
-            $sql = 'UPDATE trabalho.quadrado 
-            SET lado = :lado, cor = :cor, tabuleiro_idtabuleiro = :tabuleiro_idtabuleiro
+            $sql = 'UPDATE trabalho.circulo 
+            SET raio = :raio, cor = :cor, tabuleiro_idtabuleiro = :tabuleiro_idtabuleiro
             WHERE id = :id';
-            $parametros = array(":lado"=>$this->getLado(),
+            $parametros = array(":raio"=>$this->getraio(),
                                 ":cor"=>$this->getCor(),
                                 ":tabuleiro_idtabuleiro"=>$this->getTabuleiro(),
                                 ":id"=>$this->getId());
@@ -74,11 +74,11 @@
         }
 
         public static function listar($buscar = 0, $procurar = ""){
-            $sql = "SELECT * FROM quadrado";
+            $sql = "SELECT * FROM circulo";
             if ($buscar > 0)
                 switch($buscar){
                     case(1): $sql .= " WHERE id like :procurar"; $procurar = "%".$procurar."%"; break;
-                    case(2): $sql .= " WHERE lado like :procurar"; $procurar .="%"; break;
+                    case(2): $sql .= " WHERE raio like :procurar"; $procurar .="%"; break;
                     case(3): $sql .= " WHERE cor like :procurar"; $procurar = "%".$procurar."%"; break;
                     case(4): $sql .= " WHERE tabuleiro_idtabuleiro like :procurar"; $procurar = "%".$procurar."%"; break;
                 }
@@ -90,13 +90,13 @@
         }
         
         public function desenha(){
-            $str = "<div style='width: ".$this->getlado()."vh; height: ".$this->getlado()."vh; background: ".$this->getcor().";border: 5px solid;'></div><br>";
+            $str = "<div style='border-radius: 50%; display: inline-block; width: ".$this->Diametro()."px; height: ".$this->Diametro()."px; background: ".$this->getcor().";border: 5px solid;'></div><br>";
             return $str;
         }
 
         public static function select($rows="*", $where = null, $search = null, $order = null, $group = null) {
             $pdo = Conexao::getInstance();
-            $sql= "SELECT $rows FROM quadrado";
+            $sql= "SELECT $rows FROM circulo";
             if($where != null) {
                 $sql .= " WHERE $where";
                 if($search != null) {

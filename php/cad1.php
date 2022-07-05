@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+    include_once "../classe/autoload.php";
     include_once "../conf/default.inc.php";
     require_once "../conf/Conexao.php";
     require_once "../classe/ClassRetangulo.php";
@@ -13,7 +14,7 @@
     $altura = isset($_POST['altura']) ? $_POST['altura'] : 0;
     $base = isset($_POST['base']) ? $_POST['base'] : 0;
     $cor = isset($_POST['cor']) ? $_POST['cor'] : 0;
-    $idtabuleiro = isset($_POST['idtabuleiro']) ? $_POST['idtabuleiro'] : 0;
+    $tabuleiro_idtabuleiro = isset($_POST['tabuleiro_idtabuleiro']) ? $_POST['tabuleiro_idtabuleiro'] : 0;
     $buscar = isset($_POST["buscar"]) ? $_POST["buscar"] : 0;
     $procurar = isset($_POST["procurar"]) ? $_POST["procurar"] : "";
     $table = "retangulo";
@@ -28,17 +29,17 @@
 
     if($acao == "insert") {
         try{
-            $ret = new Retangulo("", $altura, $base, $cor, $idtabuleiro);
+            $ret = new Retangulo("", $altura, $base, $cor, $tabuleiro_idtabuleiro);
             $ret->inseri();
-            header("location:cad1.php");
+            header("location:cadRetangulo.php");
         } catch(Exception $e) {
             echo "<h1>Erro ao cadastrar as informações.</h1><br> Erro:".$e->getMessage();
         }
     } else if($acao == "editar") {
         try{
-            $ret = new Retangulo($id, $altura, $base, $cor, $idtabuleiro);
+            $ret = new Retangulo($id, $altura, $base, $cor, $tabuleiro_idtabuleiro);
             $ret->edita();
-            header("location:cad1.php");
+            header("location:cadRetangulo.php");
         } catch(Exception $e) {
             echo "<h1>Erro ao editar as informações.</h1><br> Erro:".$e->getMessage();
         }
@@ -46,7 +47,7 @@
         try{
             $ret = new Retangulo($id, "", "", "", "");
             $ret->exclui();
-            header("location:cad1.php");
+            header("location:cadRetangulo.php");
         } catch(Exception $e) {
             echo "<h1>Erro ao excluir as informações.</h1><br> Erro:".$e->getMessage();
         }
@@ -57,28 +58,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retângulo</title>
+    <title>Retangulo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
-<body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+<body>
     <header>
         <?php include_once "../menu.php"; ?>
     </header>
     <content>
-    <form action="<?php if(isset($_GET['id'])) { echo "cad1.php?id=$id&acao=editar";} else {echo "cad1.php?acao=insert";}?>" method="post" id="form" >
-        <h1>Criar um Retângulo</h1><br>
-        <div style="padding-left: 2vw ;"> 
+    <form action="<?php if(isset($_GET['id'])) { echo "cadRetangulo.php?id=$id&acao=editar";} else {echo "cadRetangulo.php?acao=insert";}?>" method="post" id="form" style="padding-left: 0.7px;">
+        <h1>Criar um Retângulo:</h1><br>
         <input readonly type="hidden" name="id" id="id" value="<?php if (isset($id)) echo $lista[0]['id'];?>">
-        <div class="col-auto">
+        <div>
             <div class="input-group">    
                 <div class="btn btn-dark">Altura:</div>
-                <input required type="text" name="altura" id="altura" value="<?php if (isset($id)) echo $lista[0]['altura'];?>" class="btn btn-dark">
+                <input required type="text" name="altura" id="altura" value="<?php if (isset($id)) echo $lista[0]['altura'];?>" class="form-control-sm btn btn-dark">
             </div>
         </div><br>
         <div class="col-auto">
             <div class="input-group">    
                 <div class="btn btn-dark">Base:</div>
-                <input required type="text" name="base" id="base" value="<?php if (isset($id)) echo $lista[0]['base'];?>" class="btn btn-dark">
+                <input required type="text" name="base" id="base" value="<?php if (isset($id)) echo $lista[0]['base'];?>" class="form-control-sm btn btn-dark">
         </div><br>
         <div class="col-auto">
             <div class="input-group">    
@@ -88,7 +88,7 @@
         <div class="col-auto">
             <div class="input-group">    
                 <div class="btn btn-dark">Tabuleiro:</div>
-                <select  name="idtabuleiro" id="idtabuleiro" value="" class="btn btn-dark" aria-label="Floating label select example">
+                <select name="tabuleiro_idtabuleiro" id="tabuleiro_idtabuleiro" value="" class="form-select-sm btn btn-dark" aria-label="Floating label select example">
                 <?php
                     $pdo = Conexao::getInstance();
                     $consulta = $pdo->query("SELECT * FROM tabuleiro;");
@@ -100,10 +100,6 @@
             </div>
         </div><br>
         <button name="" value="true" id="" type="submit" class="btn btn-dark">Salvar</button>
-        </div>
-        </div>
-        </div>
-        
     </form><br><br>
     <div class="card text-bg-dark mb-3"></div>
     <form method="post">
@@ -146,23 +142,23 @@
                 <tbody>
                 <?php
                     $ret = new Retangulo("","","","","");
-                    $lista = $ret->buscar($buscar, $procurar);
+                    $lista = $ret->listar($buscar, $procurar);
                     foreach ($lista as $linha) { 
                 ?>
                     <tr>
                         <th scope="row"><?php echo $linha['id'];?></th>
                         <th scope="row"><?php echo $linha['altura'];?></th>
                         <th scope="row"><?php echo $linha['base'];?></th>
-                        <th scope="row"><?php echo "<div style='width: 3em; height: 1.5em; background: ".$linha['cor'].";'></div><br>";?></th>
+                        <th scope="row"><?php echo "<div style='width: 4vh; height: 2vh; background: ".$linha['cor'].";'></div><br>";?></th>
                         <th scope="row"><?php echo $linha['tabuleiro_idtabuleiro'];?></th>
-                        <td scope="row"><a href="../mostrar/mostrar1.php?id=<?php echo $linha['id']; ?>&altura=<?php echo $linha['altura'];?>&base=<?php echo $linha['base'];?>&cor=<?php echo str_replace('#', '%23', $linha['cor']);?>&idtabuleiro=<?php echo $linha['tabuleiro_idtabuleiro'];?>"><img src="../img/ver.png" style="width:30px;" ></a></td>
-                        <td scope="row"><a href="cad1.php?id=<?php echo $linha['id'];?>&idtabuleiro=<?php echo $linha['tabuleiro_idtabuleiro'];?>"><img src="../img/editar.png" style="width:30px; "></a></td>
+                        <td scope="row"><a href="../mostrar/mostrar1.php?id=<?php echo $linha['id']; ?>&altura=<?php echo $linha['altura'];?>&base=<?php echo $linha['base'];?>&cor=<?php echo str_replace('#', '%23', $linha['cor']);?>&tabuleiro_idtabuleiro=<?php echo $linha['tabuleiro_idtabuleiro'];?>"><img src="../img/ver.png" style="width:30px;"></a></td>
+                        <td scope="row"><a href="cad1.php?id=<?php echo $linha['id'];?>&tabuleiro_idtabuleiro=<?php echo $linha['tabuleiro_idtabuleiro'];?>"><img src="../img/editar.png" style="width:30px;"></a></td>
                         <td><a onclick="return confirm('Deseja mesmo excluir?')" href="cad1.php?id=<?php echo $linha['id'];?>&acao=excluir"><img src="../img/excluir.png" style="width:30px;"></a></td>
                     </tr>
                 <?php } ?> 
                 </tbody>
             </table>
-            </div>
+        </div>
     </content>
     <style>
         a, a:hover {
@@ -173,11 +169,10 @@
             background-color: #d3d3d3;
         }
     </style>
-        <!--Parte do estilo-->
+    <!--Parte do estilo-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

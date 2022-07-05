@@ -1,7 +1,7 @@
 <?php
     include_once '../conf/Conexao.php';
     require_once '../conf/conf.inc.php';
-    require_once '../classe/ClassForma.php';
+    require_once 'ClassForma.php';
     class Retangulo extends Forma{
         private $altura;
         private $base;
@@ -58,7 +58,7 @@
         }
 
         public function inseri(){
-            $sql = 'INSERT INTO trabalho.retangulo (altura, base, cor, tabuleiro_idtabuleiro) 
+            $sql = 'INSERT INTO recuperacao.retangulo (altura, base, cor, tabuleiro_idtabuleiro) 
             VALUES(:altura, :base, :cor, :tabuleiro_idtabuleiro)';
             $parametros = array(":altura"=>$this->getaltura(), 
                                 ":base"=>$this->getbase(), 
@@ -68,13 +68,13 @@
         }
 
         public function exclui(){
-            $sql = 'DELETE FROM trabalho.retangulo WHERE id = :id';
+            $sql = 'DELETE FROM recuperacao.retangulo WHERE id = :id';
             $parametros = array(":id"=>$this->getId());
             return parent::executaComando($sql,$parametros);
         }
 
         public function edita(){
-            $sql = 'UPDATE trabalho.retangulo 
+            $sql = 'UPDATE recuperacao.retangulo 
             SET altura = :altura, base = :base, cor = :cor, tabuleiro_idtabuleiro = :tabuleiro_idtabuleiro
             WHERE id = :id';
             $parametros = array(":altura"=>$this->getaltura(),
@@ -85,7 +85,7 @@
             return parent::executaComando($sql,$parametros);
         }
 
-        public static function buscar($buscar = 0, $procurar = ""){
+        public static function listar($buscar = 0, $procurar = ""){
             $sql = "SELECT * FROM retangulo";
             if ($buscar > 0)
                 switch($buscar){
@@ -93,7 +93,7 @@
                     case(2): $sql .= " WHERE altura like :procurar"; $procurar = "%".$procurar."%"; break;
                     case(3): $sql .= " WHERE base like :procurar"; $procurar = "%".$procurar."%"; break;
                     case(4): $sql .= " WHERE cor like :procurar"; $procurar = "%".$procurar."%"; break;
-                    case(5): $sql .= " WHERE tabuleiro_tabuleiro_idtabuleiro like :procurar"; $procurar = "%".$procurar."%"; break;
+                    case(5): $sql .= " WHERE tabuleiro_idtabuleiro like :procurar"; $procurar = "%".$procurar."%"; break;
                 }
             if ($buscar > 0)
                 $parametros = array(':procurar'=>$procurar);

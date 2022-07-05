@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+    include_once "../classe/autoload.php";
     include_once "../conf/default.inc.php";
     require_once "../conf/Conexao.php";
     require_once "../classe/ClassTabuleiro.php";
@@ -63,8 +64,8 @@
     </header>
     <content>
     <form action="<?php if(isset($_GET['idtabuleiro'])) { echo "cad3.php?idtabuleiro=$idtabuleiro&acao=editar";} else {echo "cad3.php?acao=insert";}?>" method="post" id="form" >
-        <h1>Criar um Tabuleiro</h1><br>
-        <div style="padding-left: 2vw ;">
+        <h1>Criar um Tabuleiro:</h1><br>
+        <div>
         <input readonly type="hidden" name="idtabuleiro" id="idtabuleiro" value="<?php if (isset($idtabuleiro)) echo $lista[1]['idtabuleirotabuleiro'];?>">
         <div class="col-auto">
             <div class="input-group">    

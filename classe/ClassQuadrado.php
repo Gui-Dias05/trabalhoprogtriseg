@@ -47,7 +47,7 @@
             return $diagonal;
         }
 
-        public function insere(){
+        public function inseri(){
             $sql = 'INSERT INTO trabalho.quadrado (lado, cor, tabuleiro_idtabuleiro) 
             VALUES(:lado, :cor, :tabuleiro_idtabuleiro)';
             $parametros = array(":lado"=>$this->getLado(), 
@@ -73,7 +73,7 @@
             return parent::executaComando($sql,$parametros);
         }
 
-        public static function listar($buscar = 0, $procurar = ""){
+        public static function listar($buscar = 0, $procurar = ""){ 
             $sql = "SELECT * FROM quadrado";
             if ($buscar > 0)
                 switch($buscar){

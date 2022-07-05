@@ -2,7 +2,7 @@
     //include_once 'conf/Conexao.php';
     //require_once 'conf/conf.inc.php';
     require_once "../classe/ClassDatabase.php";
-    class Forma extends Database{
+    abstract class Forma extends Database{
         private $id;
         private $cor;
         private $tabuleiro_idtabuleiro;
@@ -47,29 +47,12 @@
                     "Id do Tabuleiro: ".$this->gettabuleiro()."<br>".
                     "Contador: ".self::$contador."<br>";
         }
-
-        public static function inserir($cor, $tabuleiro_idtabuleiro){
-            $pdo = Conexao::getInstance();
-                $stmt = $pdo->prepare('INSERT INTO recuperacao.quadrado (cor, tabuleiro_idtabuleiro) VALUES (:cor, :tabuleiro_idtabuleiro)');
-                $stmt->bindParam(':cor', $cor, PDO::PARAM_STR);
-                $stmt->bindParam(':tabuleiro_idtabuleiro', $tabuleiro_idtabuleiro, PDO::PARAM_INT);
-                return $stmt->execute();
-        }
-
-        public static function excluir($id){
-            $pdo = Conexao::getInstance();
-            $stmt = $pdo->prepare('DELETE FROM quadrado WHERE id = :id');
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
-        }
-
-        public static function editar($id, $cor, $tabuleiro_idtabuleiro){
-            $pdo = Conexao::getInstance();
-            $stmt = $pdo->prepare('UPDATE quadrado SET cor = :cor, tabuleiro_idtabuleiro = :tabuleiro_idtabuleiro WHERE id = :id');
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmt->bindValue(':cor', $cor, PDO::PARAM_STR);
-            $stmt->bindValue(':tabuleiro_idtabuleiro', $tabuleiro_idtabuleiro, PDO::PARAM_INT);
-            return $stmt->execute();
-        }
+        
+        public abstract function desenha();
+        public abstract function Area();
+        public abstract function inseri();
+        public abstract function edita();
+        public abstract function exclui();
+        public abstract static function listar($tipo = 0, $info = "");
     }
 ?>

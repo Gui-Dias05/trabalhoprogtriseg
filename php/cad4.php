@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+    include_once "../classe/autoload.php";
     include_once "../conf/default.inc.php";
     require_once "../conf/Conexao.php";
     require_once "../classe/ClassCirculo.php";
@@ -65,8 +66,8 @@
     </header>
     <content>
     <form action="<?php if(isset($_GET['id'])) { echo "cad4.php?id=$id&acao=editar";} else {echo "cad4.php?acao=insert";}?>" method="post" id="form">
-        <h1>Criar um Círculo</h1><br>
-        <div style="padding-left: 2vw ;">
+        <h1>Criar um Círculo:</h1><br>
+        <div>
         <input readonly type="hidden" name="id" id="id" value="<?php if (isset($id)) echo $lista[0]['id'];?>">
         <div class="col-auto">
             <div class="input-group">    

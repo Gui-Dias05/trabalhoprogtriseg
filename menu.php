@@ -13,6 +13,7 @@
             <li><a class="dropdown-item" href="../php/cad3.php">Tabuleiro</a></li>
             <li><a class="dropdown-item" href="../php/cad4.php">Círculo</a></li>
             <li><a class="dropdown-item" href="../php/cad5.php">Usuário</a></li>
+            <li><a class="dropdown-item" href="../php/cad6.php">Cubo</a></li>
           </ul>
         </li>
       </ul>
